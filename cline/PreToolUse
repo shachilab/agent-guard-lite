@@ -1,0 +1,25 @@
+#!/bin/sh
+# agent-guard-lite - Cline PreToolUse hook entry point for Linux / WSL / macOS.
+# The decision is made by guard.mjs in the same folder.
+# If node is missing, guard.mjs fails, or it prints nothing usable, fail closed (cancel the tool call).
+# This file must be executable: chmod +x PreToolUse
+
+FAIL='{"cancel":true,"errorMessage":"[SAFETY HOOK] guard.mjs could not run, so this tool call was stopped as a precaution. Tell the user."}'
+DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd) || { printf '%s' "$FAIL"; exit 0; }
+
+if ! command -v node >/dev/null 2>&1; then
+  printf '%s' "$FAIL"
+  exit 0
+fi
+
+RESULT=$(node "$DIR/guard.mjs" 2>/dev/null)
+STATUS=$?
+case "$RESULT" in
+  "{"*) ;;
+  *) STATUS=1 ;;
+esac
+if [ "$STATUS" -ne 0 ]; then
+  RESULT=$FAIL
+fi
+printf '%s' "$RESULT"
+exit 0

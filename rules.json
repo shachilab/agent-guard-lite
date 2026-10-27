@@ -1,0 +1,175 @@
+{
+  "$comment": "Basic rule set of agent-guard-lite. Paths outside the project and writes to .git / .claude / .clinerules etc. are checked by the engine itself.",
+  "version": 1,
+  "rules": [
+    {
+      "id": "sys.registry-edit",
+      "pattern": "\\breg(\\.exe)?\\s+(add|delete|import|load|unload|restore|copy|save)\\b",
+      "flags": "i",
+      "label": {
+        "ja": "レジストリの変更",
+        "en": "Registry change"
+      },
+      "category": "system"
+    },
+    {
+      "id": "sys.regedit",
+      "pattern": "\\bregedit\\b",
+      "flags": "i",
+      "label": {
+        "ja": "レジストリエディタ",
+        "en": "Registry editor"
+      },
+      "category": "system"
+    },
+    {
+      "id": "sys.setx",
+      "pattern": "\\bsetx\\b",
+      "flags": "i",
+      "label": {
+        "ja": "環境変数の永続変更",
+        "en": "Persistent environment variable change"
+      },
+      "category": "system"
+    },
+    {
+      "id": "sys.set-env-var",
+      "pattern": "SetEnvironmentVariable",
+      "flags": "i",
+      "label": {
+        "ja": "環境変数の永続変更",
+        "en": "Persistent environment variable change"
+      },
+      "category": "system"
+    },
+    {
+      "id": "sys.execution-policy",
+      "pattern": "\\bSet-ExecutionPolicy\\b",
+      "flags": "i",
+      "label": {
+        "ja": "実行ポリシーの変更",
+        "en": "Execution policy change"
+      },
+      "category": "system"
+    },
+    {
+      "id": "sys.defender",
+      "pattern": "\\b(Set|Add|Remove)-MpPreference\\b",
+      "flags": "i",
+      "label": {
+        "ja": "Defender 設定",
+        "en": "Microsoft Defender settings"
+      },
+      "category": "system"
+    },
+    {
+      "id": "sys.power",
+      "pattern": "\\b(Stop|Restart)-Computer\\b|\\bshutdown(\\.exe)?\\b|\\blogoff\\b|\\breboot\\b",
+      "flags": "i",
+      "label": {
+        "ja": "電源/サインアウト操作",
+        "en": "Power / sign-out"
+      },
+      "category": "system"
+    },
+    {
+      "id": "sys.elevation",
+      "pattern": "-Verb\\s+RunAs\\b|\\brunas(\\.exe)?\\b|\\bsudo\\b|\\bgsudo\\b|\\bdoas\\b|\\bsu\\s+-",
+      "flags": "i",
+      "label": {
+        "ja": "管理者権限での実行",
+        "en": "Running with admin rights"
+      },
+      "category": "system"
+    },
+    {
+      "id": "sys.encoded-command",
+      "pattern": "\\b(powershell|pwsh)(\\.exe)?\\b[^|;&]*\\s-(e|ec|en|enc|enco|encod|encode|encoded|encodedcommand)\\s",
+      "flags": "i",
+      "label": {
+        "ja": "エンコードされたコマンド",
+        "en": "Encoded command"
+      },
+      "category": "system"
+    },
+    {
+      "id": "sys.npm-global",
+      "pattern": "\\b(npm|pnpm|yarn)\\s+(install|i|add|remove|uninstall|un|rm|update|link)\\b[^|;&]*(\\s-g\\b|\\s--global\\b)|\\byarn\\s+global\\b|\\bpnpm\\s+(add|remove)\\s+-g\\b",
+      "flags": "i",
+      "label": {
+        "ja": "npm のグローバル導入",
+        "en": "Global npm install"
+      },
+      "category": "system"
+    },
+    {
+      "id": "sys.git-global-config",
+      "pattern": "\\bgit\\s+config\\s+(--global|--system)\\b|\\bgit\\s+config\\s+--file\\b",
+      "flags": "i",
+      "label": {
+        "ja": "git のグローバル設定変更",
+        "en": "Global git config change"
+      },
+      "category": "system"
+    },
+    {
+      "id": "out.http-cli",
+      "pattern": "\\b(curl|wget|iwr|irm|Invoke-WebRequest|Invoke-RestMethod|Start-BitsTransfer|bitsadmin)\\b",
+      "flags": "i",
+      "label": {
+        "ja": "コマンドでの HTTP 通信",
+        "en": "HTTP from the command line"
+      },
+      "category": "outbound"
+    },
+    {
+      "id": "out.certutil",
+      "pattern": "\\bcertutil\\b[^|;&]*-urlcache",
+      "flags": "i",
+      "label": {
+        "ja": "certutil でのダウンロード",
+        "en": "Download via certutil"
+      },
+      "category": "outbound"
+    },
+    {
+      "id": "out.git-push",
+      "pattern": "\\bgit\\s+(push|send-email|request-pull)\\b|\\bgit\\s+remote\\s+(add|set-url)\\b",
+      "flags": "i",
+      "label": {
+        "ja": "git の送信/リモート変更",
+        "en": "git push / remote change"
+      },
+      "category": "outbound"
+    },
+    {
+      "id": "out.publish",
+      "pattern": "\\b(npm|pnpm|yarn)\\s+publish\\b|\\btwine\\s+upload\\b|\\bpoetry\\s+publish\\b|\\bcargo\\s+publish\\b|\\bdocker\\s+push\\b|\\bdotnet\\s+nuget\\s+push\\b",
+      "flags": "i",
+      "label": {
+        "ja": "パッケージの公開",
+        "en": "Publishing a package"
+      },
+      "category": "outbound"
+    },
+    {
+      "id": "out.script-http",
+      "pattern": "\\b(requests|httpx|aiohttp|urllib\\.request|http\\.client|axios|fetch)\\b[^|;&]*\\b(post|put|patch|urlopen|request)\\s*\\(",
+      "flags": "i",
+      "label": {
+        "ja": "スクリプト経由の HTTP 送信",
+        "en": "HTTP request from an inline script"
+      },
+      "category": "outbound"
+    }
+  ],
+  "protectedInProject": [
+    ".vscode",
+    ".clinerules",
+    ".cline",
+    ".claude",
+    ".git",
+    ".clineignore",
+    "CLAUDE.md"
+  ]
+}

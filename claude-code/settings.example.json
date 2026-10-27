@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/agent-guard-lite/guard.mjs\" || exit 2"
+          }
+        ]
+      }
+    ]
+  }
+}
